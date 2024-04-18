@@ -23,7 +23,8 @@ builder.Services.AddSwaggerGen();
 // builder.Services.AddSingleton<IQuizUserService, QuizUserService>();
 builder.Services.AddDbContext<QuizDbContext>();                             // infrastructure
 builder.Services.AddTransient<IQuizUserService, QuizUserServiceEF>();       // infrastructure
-//builder.Services.AddSingleton<IQuizAdminService, QuizAdminService>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

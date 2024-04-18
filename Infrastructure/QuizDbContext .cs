@@ -18,13 +18,31 @@ namespace Infrastructure
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(
-                "DATA SOURCE=...;DATABASE=...;Integrated Security=true;TrustServerCertificate=True");
+
+            optionsBuilder.UseSqlServer("" +
+                "Data Source=DESKTOP-QD5U2FA\\SQLEXPRESS;Initial Catalog=MyQuizDatabase;Integrated Security=True;Encrypt=false;");
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<QuizItemUserAnswerEntity>()
+                .HasOne<QuizEntity>()
+                .WithMany()
+                .HasForeignKey(a => a.QuizId);
+
+            modelBuilder.Entity<QuizItemUserAnswerEntity>()
+                .HasOne<UserEntity>()
+                .WithMany()
+                .HasForeignKey(a => a.UserId);
+
+
+
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "email@email.com", Password = "password123!@#" });
+
+
 
             modelBuilder.Entity<QuizItemUserAnswerEntity>()
                 .HasOne(e => e.QuizItem);
@@ -133,7 +151,7 @@ namespace Infrastructure
                         new { QuizItemsId = 4, IncorrectAnswersId = 6 },
                         new { QuizItemsId = 4, IncorrectAnswersId = 8 },
                         // "1 * 1"
-                        new { QuizItemsId = 5, IncorrectAnswersId = 1 },
+                        new { QuizItemsId = 5, IncorrectAnswersId = 3 },
                         new { QuizItemsId = 5, IncorrectAnswersId = 2 },
                         new { QuizItemsId = 5, IncorrectAnswersId = 4 },
                         // "6 * 6"
