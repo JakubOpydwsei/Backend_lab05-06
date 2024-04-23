@@ -1,4 +1,5 @@
 ﻿using Infrastructure.EF.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class QuizDbContext : DbContext
+    public class QuizDbContext : IdentityDbContext<UserEntity, UserRole, int>
     {
         public DbSet<QuizEntity> Quizzes { get; set; }
         public DbSet<QuizItemEntity> QuizItems { get; set; }
@@ -20,7 +21,7 @@ namespace Infrastructure
             base.OnConfiguring(optionsBuilder);
 
             optionsBuilder.UseSqlServer("" +
-                "Data Source=DESKTOP-QD5U2FA\\SQLEXPRESS;Initial Catalog=MyQuizDatabase;Integrated Security=True;Encrypt=false;");
+                "Data Source=DESKTOP-QD5U2FA\\SQLEXPRESS;Initial Catalog=myQuizDatabase;Integrated Security=True;Encrypt=false;");
 
         }
 
@@ -40,7 +41,7 @@ namespace Infrastructure
 
 
 
-            modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "email@email.com", Password = "password123!@#" });
+            //modelBuilder.Entity<UserEntity>().HasData(new UserEntity { Id = 1, Email = "email@email.com", Password = "zaq1@WSX" });
 
 
 

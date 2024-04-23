@@ -40,10 +40,7 @@ namespace Infrastructure.EF.Mappers
             return new QuizItemUserAnswer
             {
                 QuizId = entity.QuizId,
-                QuizItem = new QuizItem
-                {
-                    Id = entity.QuizItem.Id,
-                },
+                QuizItem = FromEntityToQuizItem(entity.QuizItem),
                 UserId = entity.UserId,
                 Answer = entity.UserAnswer
             };

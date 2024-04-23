@@ -1,7 +1,16 @@
 ﻿using ApplicationCore.Interfaces;
 using ApplicationCore.Models;
+using Infrastructure.EF.Entities;
+using JWT.Algorithms;
+using JWT.Builder;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using WebAPI.Configuration;
+using WebAPI.Dto;
 
 namespace WebAPI.Controllers;
 [ApiController]
@@ -29,19 +38,20 @@ public class QuizController: ControllerBase
     }
 
     [HttpPost]
-    [Route("{quizId}/items/{itemId}/answers")]
-    public ActionResult SaveAnswer([FromBody] QuizItemAnswerDto dto, int quizId, int itemId)
+[Authorize(Policy = "Bearer")]
+[Route("{quizId}/items/{itemId}/answers")]
+public ActionResult SaveAnswer([FromBody] QuizItemAnswerDto dto, int quizId, int itemId)
+{
+    try
     {
-        try
-        {
-            var answer = _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.UserAnswer);
-            return Created("", answer);
-        }
-        catch (Exception)
-        {
-            return BadRequest();
-        }
+        var answer = _service.SaveUserAnswerForQuiz(quizId, itemId, dto.UserId, dto.UserAnswer);
+        return Created("", answer);
     }
+    catch (Exception e)
+    {
+        return BadRequest(e.Message);
+    }
+}
 
     [HttpGet, Produces("application/json")]
     [Route("{quizId}/feedbacks")]
@@ -63,4 +73,10 @@ public class QuizController: ControllerBase
             }).ToList()
         };
     }
+
+
+
+
+
+
 }
